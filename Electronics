@@ -1,0 +1,15 @@
+public class Electronics extends Product{
+    protected String brand;
+    protected String warrantyPeriod;
+
+    public Electronics(String name, String category, double price, int quantity, String brand, String warrantyPeriod){
+        super(name, category, price, quantity);
+        this.brand = brand;
+        this.warrantyPeriod =warrantyPeriod;
+    }
+
+    @Override
+    public String getDetails(){
+        return super.getDetails() + ", Brand: " + brand + ", Warranty Period: " + warrantyPeriod;
+    }
+}
