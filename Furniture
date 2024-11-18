@@ -1,0 +1,15 @@
+public class Furniture extends Product{
+    protected String materialType;
+    protected String dimensions;
+
+    public Furniture(String name, String category, double price, int quantity, String materialType, String dimensions){
+        super(name, category, price, quantity);
+        this.dimensions =dimensions;
+        this.materialType =materialType;
+    }
+
+    @Override
+    public String getDetails(){
+        return super.getDetails() + ", Material Type: " + materialType + ", Dimensions: " + dimensions;
+    }
+}
