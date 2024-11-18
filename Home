@@ -1,0 +1,213 @@
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Scanner;
+import java.util.ArrayList;
+import java.util.Map;
+import java.io.FileWriter;
+import java.io.IOException;
+
+
+public class Home {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        boolean isRunning = false;
+        ArrayList<LinkedHashMap<String, String>> Inventory = new ArrayList<>();
+        try{
+            FileWriter filewriter = new FileWriter("Inventory.txt");
+        } catch (IOException e){
+            e.printStackTrace();
+        }
+
+        String[] menuOptions = {
+                "Add Item",
+                "Update Item",
+                "Delete Item",
+                "View Inventory",
+                "Search Inventory",
+                "Calculate Total Value",
+                "Exit"
+        };
+        while (!isRunning) {
+            System.out.println("Inventory Management System");
+            for (int i = 0; i < 7; i++) {
+                System.out.println(i + 1 + ". " + menuOptions[i]);
+            }
+            System.out.println("Enter your choice (enter the number)");
+            int choice = scanner.nextInt();
+            scanner.nextLine();
+
+            LinkedHashMap<String, String> item = new LinkedHashMap<>();
+
+            switch (choice) {
+                //ADD OPTION!
+                case 1:
+
+                    item = addItem(scanner);
+
+                    Inventory.add(item);
+                    System.out.println("Item added successfully.");
+                    break;
+
+
+                case 2:
+                    viewInventory(Inventory);
+
+
+                    System.out.println("Which item would you like update? ");
+                    int itemToUpdate = scanner.nextInt();
+                    scanner.nextLine();
+
+                    item = addItem(scanner);
+                    Inventory.set(itemToUpdate - 1, item);
+                    System.out.println("Item updated successfully.");
+
+
+                    break;
+
+
+                case 3:
+                    System.out.println("Which item would you like to delete?");
+                    int itemToDelete = scanner.nextInt();
+                    scanner.nextLine();
+
+                    Inventory.remove(itemToDelete - 1);
+                    System.out.println("Item deleted successfully.");
+                    break;
+
+
+                case 4:
+                    viewInventory(Inventory);
+                    break;
+
+                case 5:
+                    System.out.println("What criteria would you like to search with? (Name, Category, Price) ");
+                    String criteria = scanner.nextLine();
+
+                    System.out.println("Enter " + criteria + ":");
+                    String value = scanner.nextLine();
+
+                    searchInventory(Inventory, criteria, value);
+                    break;
+
+                case 6:
+                    double totalValue = 0;
+                    for (int i = 0; i < Inventory.size(); i++){
+                        LinkedHashMap<String, String> getMap = Inventory.get(i);
+                            String price = getMap.get("Price");
+                            double parsedPrice = Double.parseDouble(price);
+                            totalValue += parsedPrice;
+                        }
+                    System.out.println("The total value is: $" + totalValue);
+                    break;
+
+                case 7:
+                    System.out.println("Thank you for using the Inventory Managment System!");
+                    System.out.println("Goodbye!");
+                    isRunning = true;
+                    break;
+                    }
+
+            }
+        }
+
+
+        //------------ADD METHOD-----------//
+        public static LinkedHashMap<String, String> addItem (Scanner scanner){
+
+            LinkedHashMap<String, String> item = new LinkedHashMap<>();
+
+            System.out.print("Enter item name: ");
+            String name = scanner.nextLine();
+
+            System.out.print("Enter item category: ");
+            String category = scanner.nextLine();
+
+            System.out.print("Enter item price: ");
+            String price = scanner.nextLine();
+
+            System.out.print("Enter item quantity: ");
+            String quantity = scanner.nextLine();
+
+            double parsedPrice = Double.parseDouble(price);
+            int parsedQuantity = Integer.parseInt(quantity);
+
+            switch (category.toLowerCase()) {
+                case "furniture":
+                    System.out.print("Material Type: ");
+                    String materialType = scanner.nextLine();
+
+                    System.out.print("Dimensions: ");
+                    String dimensions = scanner.nextLine();
+
+                    Product furniture = new Furniture(name, category, parsedPrice, parsedQuantity, materialType, dimensions);
+                    item.put("Name", name);
+                    item.put("Category", category);
+                    item.put("Price", price);
+                    item.put("Quantity", quantity);
+                    item.put("Material Type", materialType);
+                    item.put("Dimensions", dimensions);
+                    break;
+
+                case "electronics":
+                    System.out.print("Brand: ");
+                    String brand = scanner.nextLine();
+
+                    System.out.print("Warranty Period: ");
+                    String period = scanner.nextLine();
+                    Product electornics = new Electronics(name, category, parsedPrice, parsedQuantity,
+                            brand, period);
+
+                    item.put("Name", name);
+                    item.put("Category", category);
+                    item.put("Price", price);
+                    item.put("Quantity", quantity);
+                    item.put("Brand", brand);
+                    item.put("Warranty Period", period);
+                    break;
+
+
+
+            }
+            return item;
+        }
+
+        //------------VIEW METHOD-----------//
+            public static void viewInventory(ArrayList<LinkedHashMap<String, String>> Inventory){
+                if (Inventory.isEmpty()) {
+                    System.out.println("The inventory is currently empty.");
+                } else {
+                    for (int i = 0; i < Inventory.size(); i++) {
+                        System.out.print("Item " + (i + 1) + ". ");
+                        LinkedHashMap<String, String> itemToView = Inventory.get(i);
+                        for (Map.Entry<String, String> map : itemToView.entrySet()) {
+                            System.out.print(map.getKey() + ": " + map.getValue() + " | ");
+                        }
+                        System.out.println();
+                    }
+                }
+
+            }
+
+
+    private static void searchInventory(ArrayList<LinkedHashMap<String, String>> Inventory, String criteria, String value) {
+        boolean matchFound = false;
+        for (int i = 0; i < Inventory.size(); i++) {
+            LinkedHashMap<String, String> checkMap = Inventory.get(i);
+            if (checkMap.containsKey(criteria) && checkMap.get(criteria).equalsIgnoreCase(value)) {
+                matchFound = true;
+                System.out.println("Item " + (i + 1) + ":");
+                checkMap.forEach((key, val) -> System.out.print(key + ": " + val + " | "));
+                System.out.println();
+            }
+        }
+        if (!matchFound) {
+            System.out.println("No items found with the " + criteria + ": " + value);
+        }
+    }
+
+    public static void saveFile(){
+
+    }
+}
+
+
