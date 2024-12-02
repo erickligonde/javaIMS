@@ -47,7 +47,7 @@ public class Home {
                     System.out.println("Item added successfully.");
                     break;
 
-
+                //UPDATE OPTION!
                 case 2:
                     viewInventory(Inventory);
 
@@ -66,7 +66,7 @@ public class Home {
 
                     break;
 
-
+                //DELETE OPTION!
                 case 3:
                     viewInventory(Inventory);
                     if (Inventory.isEmpty()){
@@ -80,11 +80,12 @@ public class Home {
                     System.out.println("Item deleted successfully.");
                     break;
 
-
+                //VIEW OPTION!
                 case 4:
                     viewInventory(Inventory);
                     break;
 
+                //SEARCH OPTION!
                 case 5:
                     if (Inventory.isEmpty()){
                         viewInventory(Inventory);
@@ -99,6 +100,7 @@ public class Home {
                     searchInventory(Inventory, criteria, value);
                     break;
 
+                //CALCULATE TOTAL OPTION!
                 case 6:
                     double totalValue = 0;
                     for (int i = 0; i < Inventory.size(); i++){
@@ -110,6 +112,7 @@ public class Home {
                     System.out.println("The total value is: $" + totalValue);
                     break;
 
+                //EXIT OPTION!
                 case 7:
                     System.out.println("Thank you for using the Inventory Managment System!");
                     System.out.println("Goodbye!");
@@ -199,6 +202,7 @@ public class Home {
     }
 
 
+    //------------SEARCH METHOD-----------//
     private static void searchInventory(ArrayList<LinkedHashMap<String, String>> Inventory, String criteria, String value) {
         boolean matchFound = false;
         for (int i = 0; i < Inventory.size(); i++) {
@@ -215,6 +219,7 @@ public class Home {
         }
     }
 
+    //------------SAVE METHOD-----------//
     public static void saveFile(ArrayList<LinkedHashMap<String, String>> inventory){
         try {
             FileWriter filewriter = new FileWriter("src/inventory.txt", false);
@@ -234,6 +239,7 @@ public class Home {
 
     }
 
+    //------------LOAD METHOD-----------//
     public static void loadFile(ArrayList<LinkedHashMap<String, String>> inventory){
       try {
           FileReader fileReader = new FileReader("src/inventory.txt");
